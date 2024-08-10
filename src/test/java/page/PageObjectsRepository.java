@@ -127,97 +127,70 @@ public class PageObjectsRepository extends SuperHelper {
 	@CacheLookup
 	public WebElement newencounter;	
 	
-	@FindBy(how = How.XPATH, using = "//input[@id='encounter_datetime']")
+	@FindBy(how = How.XPATH, using = "//*[@id='encounter_datetime']")
 	@CacheLookup
 	public WebElement encounterDateTime;	
 	
 	
-	@FindBy(how = How.XPATH, using = "//input[@id='encounter-status-select']")
+	@FindBy(how = How.XPATH, using = "//*[@id='encounter-status-select']")
 	@CacheLookup
 	public WebElement encounterStatus;	
 	
-	@FindBy(how = How.XPATH, using = "//input[@id='encounter_type_select']")
+	@FindBy(how = How.XPATH, using = "//*[@id='encounter_type_select']")
 	@CacheLookup
 	public WebElement encounterType;	
 
-	@FindBy(how = How.XPATH, using = "//input[@id='exampleFormControlTextarea1']")
+	@FindBy(how = How.XPATH, using = "//*[@id='exampleFormControlTextarea1']")
 	@CacheLookup
 	public WebElement encountercomment;	
 	
-	@FindBy(how = How.XPATH, using = "//input[@type='submit'and @value='Save Changes']")
+	@FindBy(how = How.XPATH, using = "//*[@type='submit'and @value='Save Changes']")
 	@CacheLookup
 	public WebElement encountersavechanges;	
 	
 	
+	@FindBy(how = How.ID, using = "pills-PROMIS2-tab")
+	@CacheLookup
+	public WebElement promis2;
+	
+	@FindBy(how = How.ID, using = "pills-SAM-tab")
+	@CacheLookup
+	public WebElement alcohol;
+	@FindBy(how = How.ID, using = "pills-SDUM-tab")
+	@CacheLookup
+	public WebElement drug;
+	@FindBy(how = How.ID, using = "pills-PHQ9-tab")
+	@CacheLookup
+	public WebElement phq;
+	
+	@FindBy(how = How.ID, using = "pills-GAD7-tab")
+	@CacheLookup
+	public WebElement Gad7;
+	
+	@FindBy(how = How.XPATH, using = "(//table[contains(@class, 'table-fixed')])[1]")
+	@CacheLookup
+	public WebElement questiontablepromis;
+	
+	@FindBy(how = How.XPATH, using = "(//table[contains(@class, 'table-fixed')])[2]")
+	@CacheLookup
+	public WebElement questiontablealcohol;	
+	
+	@FindBy(how = How.XPATH, using = "(//table[contains(@class, 'table-fixed')])[3]")
+	@CacheLookup
+	public WebElement questiontabledrug;	
+	
+	@FindBy(how = How.XPATH, using = "(//table[contains(@class, 'table-fixed')])[4]")
+	@CacheLookup
+	public WebElement questiontablephq;	
+	
+	@FindBy(how = How.XPATH, using = "(//table[contains(@class, 'table-fixed')])[5]")
+	@CacheLookup
+	public WebElement questiontablegad7;	
 	
 	
 
 	
 	
 	
-	
-	
-//  
-//	//Other ways 
-//	public By Identification_Number = By.xpath("//input[@id=\"ctl00_MainContent_maincontent_ctl01_txtIdentificationNum\"]"); 
-//
-//	// If property of an object is dynamic in nature
-//	WebElement pwd;
-//	public WebElement password(String strNameValue) {
-//		pwd = driver.findElement(By.name(strNameValue));
-//		return pwd;
-//
-//	}
-//
-//	// in case you want to use XPATH
-//	@FindBy(how = How.XPATH, using = "//input[@type='submit']")
-//	@CacheLookup
-//	public WebElement submit;
 
-
-	/**
-	 * Logs into the application
-	 * @param userProfile
-	 * @author Santosh Bukkashetti (AF37512)
-	 */
-//	public void loginApplication(String userProfile) {
-//
-//		//getLoginInfo function provides the user id and password from the user profile
-//		String[] userInfo = getLoginInfo(userProfile);
-//
-//		setUserName(userInfo[0]);
-//
-//		setPassword(userInfo[1]);
-//
-//		clickSubmit();
-//	}
-//
-//	/**
-//	 * Sets user name
-//	 * @param strUserID User ID
-//	 * @author Santosh Bukkashetti (AF37512)
-//	 */
-//	public void setUserName(String strUserID) {
-//		seSetUserId(userName, strUserID, "User Name");
-//	}
-//
-//	
-//	/**
-//	 * Sets password
-//	 * @param strPasword encrypted password
-//	 * @author Santosh Bukkashetti (AF37512)
-//	 */
-//	public void setPassword(String strPasword) {
-//		seSetPassword(pwd, strPasword, "Enter Password");
-//	}
-//
-//	
-//	/**
-//	 * Clicks on Submit button
-//	 * @author Santosh Bukkashetti (AF37512)
-//	 */
-//	public void clickSubmit() {
-//		seClick(submit, "Click Submit button");
-//	}
-//
 }

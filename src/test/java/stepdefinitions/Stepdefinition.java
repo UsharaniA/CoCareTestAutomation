@@ -93,23 +93,25 @@ public class Stepdefinition extends Cucumberseleniumgluescripts {
 //
 //	}
 
-	@Given("the user navigates to the login page")
-	public void the_user_navigates_to_the_login_page() {
-		try {
-			navigatetologinscreen();
-		} catch (Exception e) {
-//			hooks.attachExceptionToScenario(scenario,e,"Login");
-//            throw e;
-			allurereportmanager.captureAndAttachScreenshot("screenshotname");
-		}
-
-	}
+//	@Given("the user navigates to the login page")
+//	public void the_user_navigates_to_the_login_page() {
+//		try {
+//			navigatetologinscreen();
+//		} catch (Exception e) {
+////			hooks.attachExceptionToScenario(scenario,e,"Login");
+////            throw e;
+//			allurereportmanager.captureAndAttachScreenshot("screenshotname");
+//		}
+//
+//	}
 
 	@Given("the user logins in with valid useremail {string} and password {string} and clicks the login button")
 	public void theUserEntersValidUserEmailAndPasswordAndClicksTheLoginButton(String email, String password)
 			throws Exception {
 
 		try {
+			
+			
 			logintoApplication(email, password);
 			hooks.captureAndAttachScreenshotToAllure("Login");
 		} catch (Exception e) {
@@ -206,41 +208,82 @@ public class Stepdefinition extends Cucumberseleniumgluescripts {
 	@When("the user clicks on the New Participant button , create New Participant with StudyID {string},EnrollmentDate {string},PrimaryCarePhysician {string},Location {string} and Save Participant")
 	public void createnewparticiapntwithdetails(String StudyID, String EnrollmentDate, String PrimaryCarePhysician,
 			String Location) throws Exception {
-		if (StudyID.equals("")) {
-			StudyID="Automation123"	;
-			
-		}
-		if (EnrollmentDate.equals("")) {
-			LocalDate today = LocalDate.now(); // Get today's date	  
-	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-	        EnrollmentDate = today.format(formatter);		
-		}
 		
-		if (PrimaryCarePhysician.equals("")) {
-			PrimaryCarePhysician="AutomationPhysician"	;	
-		}
 		try {
 
-		createnewparticipant(StudyID, EnrollmentDate, PrimaryCarePhysician, Location);
-	
+			createnewparticipant(StudyID, EnrollmentDate, PrimaryCarePhysician, Location);
+
 		} catch (Exception e) {
 			hooks.handleexceptioncucumbersteps(e, "createnewparticiapntwithdetails");
 			throw e;
 		}
-		}
-	
-	
+	}
+
 //	And enter details to create New Encounter with EncounterStatus "<EncounterStatus>" and EncounterType "<EncounterType>"
 	@And("enter details to create New Encounter with EncounterStatus {string} and EncounterType {string}")
-	public void createencounterfromdetails(String EncounterStatus, String EncounterType ) throws Exception {
-	
+	public void createencounterfromdetails(String EncounterStatus, String EncounterType) throws Exception {
+
 		try {
 			createnewencounter(EncounterStatus, EncounterType);
-		
-		
-	} catch (Exception e) {
-		hooks.handleexceptioncucumbersteps(e, "createnewencounterwithdetails");
-		throw e;
+
+		} catch (Exception e) {
+			hooks.handleexceptioncucumbersteps(e, "createnewencounterwithdetails");
+			throw e;
+		}
 	}
+
+	@Then("update Questionnaire for Promis")
+	public void update_Questionnaire_Promis() throws Exception {
+		try {
+			promisQuestionnaire();
+
+		} catch (Exception e) {
+			hooks.handleexceptioncucumbersteps(e, "update_Questionnaire_Promis");
+			throw e;
+		}
+	}
+	
+	@Then("update Questionnaire for Alcohol")
+	public void update_Questionnaire_Alcohol() throws Exception {
+		try {
+			alcoholQuestionnaire();
+
+		} catch (Exception e) {
+			hooks.handleexceptioncucumbersteps(e, "update_Questionnaire_Promis");
+			throw e;
+		}
+	}
+	
+	@Then("update Questionnaire for Drug")
+	public void update_Questionnaire_Drug() throws Exception {
+		try {
+			drugQuestionnaire();
+
+		} catch (Exception e) {
+			hooks.handleexceptioncucumbersteps(e, "update_Questionnaire_Promis");
+			throw e;
+		}
+	}
+	
+	@Then("update Questionnaire for PHQ")
+	public void update_Questionnaire_PHQ() throws Exception {
+		try {
+			phqQuestionnaire();
+
+		} catch (Exception e) {
+			hooks.handleexceptioncucumbersteps(e, "update_Questionnaire_Promis");
+			throw e;
+		}
+	}
+	
+	@Then("update Questionnaire for GAD")
+	public void update_Questionnaire_GAD() throws Exception {
+		try {
+			gadQuestionnaire();
+
+		} catch (Exception e) {
+			hooks.handleexceptioncucumbersteps(e, "update_Questionnaire_Promis");
+			throw e;
+		}
 	}
 }

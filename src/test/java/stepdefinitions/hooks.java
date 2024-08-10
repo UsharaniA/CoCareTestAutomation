@@ -64,7 +64,7 @@ public class hooks extends Cucumberseleniumgluescripts {
 
 			hooks.setScenario(scenario);
 			  EnvConstants.screenshotPath=FileUtility.createResultFolder(TEST_CASE_ID);
-//			loadData();
+			loadData();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

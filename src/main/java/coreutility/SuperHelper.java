@@ -12,10 +12,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
@@ -417,7 +419,7 @@ public class SuperHelper extends ExcelDataReader {
 	 *            Enter Button name (e.g LoginButton or Submit Button)
 	 */
 	public static boolean seClick(boolean screenshot, WebElement testObject, String buttonName) {
-		return seClick(false, testObject, buttonName, null);
+		return seClick(true, testObject, buttonName, null);
 	}
 
 	/**
@@ -449,6 +451,7 @@ public class SuperHelper extends ExcelDataReader {
 //						"Expected button \"" + buttonName + "\" clicked successfully");
 
 			} else {
+				 System.out.println("----------Unable to click the button---------");
 
 //				ExtentReportsUtility.log(successFlag, step, "Unable to click the button \"" + buttonName
 //						+ "\" successfully" + seCaptureScreenshot(driver, buttonName));
@@ -1248,14 +1251,19 @@ public class SuperHelper extends ExcelDataReader {
 	 * @param stepName
 	 * @return boolean
 	 */
-	public static boolean seClickUsingJavaScript(Boolean screenshot, By webelement, String stepName) {
+	public static boolean seClickUsingJavaScript(boolean screenshot, WebElement testObject,String stepname) {
 		boolean objectFound = false;
 		try {
-			WebElement element = driver.findElement(webelement);
-			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-			((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+//			WebElement element = driver.findElement(webelement);
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", testObject);
+			((JavascriptExecutor) driver).executeScript("arguments[0].click();", testObject);
 //			ExtentReportsUtility.log(EnvConstants.PASS, stepName, "Clicked at the Web element: " + webelement);
 			objectFound = true;
+			
+			if (screenshot) {
+				seCaptureScreenshot(stepname);
+//				ExtentReportsUtility.log(successFlag, step, seCaptureScreenshot(driver, buttonName));
+			}
 		} catch (NoSuchElementException nse) {
 			nse.printStackTrace();
 //			ExtentReportsUtility.log(EnvConstants.FAIL, stepName, "Unable to click Web element");
@@ -1530,4 +1538,53 @@ public class SuperHelper extends ExcelDataReader {
 //    // Click or perform actions on the randomly selected <td>
 //    randomCell.click();
 //    System.out.println("Selected TD text: " + randomCell.getText());
+	
+	public void seSelectQuestionaire(WebElement testObject) {
+	    try {
+	        seHighlightElement(testObject);
+
+	        // Find all tr elements under the tbody
+	        List<WebElement> rows = testObject.findElements(By.xpath(".//tbody/tr"));
+	        System.out.println("Number of rows found: " + rows.size());
+
+	        // Iterate through each row
+	        for (WebElement row : rows) {
+	            // Find all input elements within the row
+	            List<WebElement> inputs = row.findElements(By.tagName("input"));
+
+	            if (!inputs.isEmpty()) {
+	                // Filter inputs to only include those with a value between 1 and 5
+	                List<WebElement> validInputs = new ArrayList<>();
+	                for (WebElement input : inputs) {
+	                    String value = input.getAttribute("value");
+
+	                    if (value != null && value.matches("[1-5]")) {
+	                        validInputs.add(input);
+	                    }
+	                }
+
+	                // If there are valid inputs, select a random one and click it
+	                if (!validInputs.isEmpty()) {
+	                    Random rand = new Random();
+	                    int randomIndex = rand.nextInt(validInputs.size());
+	                    WebElement randomInput = validInputs.get(randomIndex);
+
+	                    // Scroll into view and then click
+	                    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", randomInput);
+	                    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", randomInput);
+	                    System.out.println("Clicked on input with value: " + randomInput.getAttribute("value"));
+	                } else {
+	                    System.out.println("No valid input found in this row.");
+	                }
+	            } else {
+	                System.out.println("No input elements found in this row.");
+	            }
+	        }
+
+	    } catch (Exception e) {
+	        System.out.println("Exception caught during execution: " + e.getMessage());
+	        handleException(e);
+	    }
+	}
+
 }
