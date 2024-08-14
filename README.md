@@ -1,3 +1,5 @@
+Preferred Chrome Version :  127.0.6533.101
+
 1. Download and Install Java
 •	Download JDK:
 o	Go to the Oracle JDK download page or AdoptOpenJDK.
