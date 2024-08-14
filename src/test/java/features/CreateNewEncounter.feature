@@ -11,5 +11,9 @@ Feature: Create New Encounter
     Then update Questionnaire for Drug
     Then update Questionnaire for PHQ
     Then update Questionnaire for GAD
-
-   
+    Then update Questionnaire for Overdose with EnrollmentDate "pEnrollmentDate" ,OverdoseDate "pOverdoseDate" , OverdoseTreatment "pOverdoseTreatment" ,naloxone "pnaloxone"
+    Then update Questionnaire for RxMeds
+    Then update Questionnaire for Contigency Management using "pContingency"
+    Then update Questionnaire for UDS with UDSDate "pEnrollmentDate" , UrineDrugTest "pUrineDrugTest" ,UDSResults "pUDSResults"
+    
+    

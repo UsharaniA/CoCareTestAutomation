@@ -3,7 +3,7 @@ Feature: User login Authetication
 
   @TestCaseKey=CC-T21
   Scenario Outline: ValidateAuthenticationInvalidCredential
-    Given the user logins in with valid useremail "<useremail>" and password "<password>" and clicks the login button
+   Given the user logins in with valid useremail "puseremail" and password "ppassword" and clicks the login button
     When the user clicks on the Admin button and goes to user page and click on User button
     And select the useremail "<useremail>"
     And click on the Security Tab
@@ -13,5 +13,5 @@ Feature: User login Authetication
       | Test123art5 | Password must contain at least one number and one symbol. |
 
     Examples: 
-      | useremail                            | password     |
-      | cocareproject2024@gmail.com | Eclipse$2024 |
+      | useremail                            | 
+      | cocareproject2024@gmail.com | 

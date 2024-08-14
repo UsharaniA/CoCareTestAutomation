@@ -104,6 +104,8 @@ public class Stepdefinition extends Cucumberseleniumgluescripts {
 //		}
 //
 //	}
+	
+
 
 	@Given("the user logins in with valid useremail {string} and password {string} and clicks the login button")
 	public void theUserEntersValidUserEmailAndPasswordAndClicksTheLoginButton(String email, String password)
@@ -113,7 +115,7 @@ public class Stepdefinition extends Cucumberseleniumgluescripts {
 			
 			
 			logintoApplication(email, password);
-			hooks.captureAndAttachScreenshotToAllure("Login");
+//			hooks.captureAndAttachScreenshotToAllure("Login");
 		} catch (Exception e) {
 			hooks.setException(e);// Store the exception for the hook
 			hooks.captureAndAttachScreenshotToAllure("Login");
@@ -136,6 +138,7 @@ public class Stepdefinition extends Cucumberseleniumgluescripts {
 	@When("the user clicks on the Admin button and goes to user page and click on User button")
 	public void theUserClicksOnTheAdminButton() throws Exception {
 		try {
+			
 			clickAdmin_User();
 		} catch (Exception e) {
 			hooks.setException(e);
@@ -210,9 +213,10 @@ public class Stepdefinition extends Cucumberseleniumgluescripts {
 			String Location) throws Exception {
 		
 		try {
+			
 
 			createnewparticipant(StudyID, EnrollmentDate, PrimaryCarePhysician, Location);
-
+			 
 		} catch (Exception e) {
 			hooks.handleexceptioncucumbersteps(e, "createnewparticiapntwithdetails");
 			throw e;
@@ -225,6 +229,7 @@ public class Stepdefinition extends Cucumberseleniumgluescripts {
 
 		try {
 			createnewencounter(EncounterStatus, EncounterType);
+			
 
 		} catch (Exception e) {
 			hooks.handleexceptioncucumbersteps(e, "createnewencounterwithdetails");
@@ -286,4 +291,52 @@ public class Stepdefinition extends Cucumberseleniumgluescripts {
 			throw e;
 		}
 	}
+	
+	@Then("update Questionnaire for Overdose with EnrollmentDate {string} ,OverdoseDate {string} , OverdoseTreatment {string} ,naloxone {string}")
+	public void update_Questionnaire_Overdose(String pEnrollmentDate ,String pOverdoseDate ,String pOverdoseTreatment ,String pnaloxone) throws Exception {
+		try {
+			overDoseQuestionnaire(pEnrollmentDate,pOverdoseDate,pOverdoseTreatment,pnaloxone);
+
+		} catch (Exception e) {
+			hooks.handleexceptioncucumbersteps(e, "update_Questionnaire_Overdose");
+			throw e;
+		}
+	}
+	
+	@Then("update Questionnaire for UDS with UDSDate {string} , UrineDrugTest {string} ,UDSResults {string}")
+			public void update_Questionnaire_UDS(String pEnrollmentDate ,String pUrineDrugTest ,String pUDSResults) throws Exception {
+		try {
+			udsQuestionnaire(pEnrollmentDate,pUrineDrugTest,pUDSResults);
+
+		} catch (Exception e) {
+			hooks.handleexceptioncucumbersteps(e, "update_Questionnaire_UDS");
+			throw e;
+		}
+	}
+
+
+	@Then("update Questionnaire for RxMeds")
+	public void update_Questionnaire_RxMeds() throws Exception {
+		try {
+			rxmedsQuestionnaire();
+
+		} catch (Exception e) {
+			hooks.handleexceptioncucumbersteps(e, "update_Questionnaire_RxMeds");
+			throw e;
+		}
+	}
+	
+	@Then("update Questionnaire for Contigency Management using {string}")
+	public void update_Questionnaire_ContigencyMgt(String pContingency) throws Exception {
+		try {
+			contigencyQuestionnaire(pContingency);
+
+		} catch (Exception e) {
+			hooks.handleexceptioncucumbersteps(e, "update_Questionnaire_ContigencyMgt");
+			throw e;
+		}
+	}
+	
+
+	
 }

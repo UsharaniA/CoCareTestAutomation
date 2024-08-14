@@ -16,7 +16,14 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.imageio.ImageIO;
+
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 import org.junit.Assert;
 import org.openqa.selenium.OutputType;
@@ -63,6 +70,7 @@ public class hooks extends Cucumberseleniumgluescripts {
 			}
 
 			hooks.setScenario(scenario);
+			 Allure.parameter("Name", "Usha");
 			  EnvConstants.screenshotPath=FileUtility.createResultFolder(TEST_CASE_ID);
 			loadData();
 		} catch (Exception e) {
@@ -75,7 +83,7 @@ public class hooks extends Cucumberseleniumgluescripts {
 	public void afterScenario() throws Exception {
 
 		System.out.println("*****************After Scenario*****************");
-		SuperHelper.seCloseBrowser();
+//		SuperHelper.seCloseBrowser();
 		createPdfFromFolder(TEST_CASE_ID + ".pdf");
 //		ZephyrScaleAPI.updateTestResult(jiratestkey, allurereportmanager.getTestStatus()); // 1 for Pass in Zephyr
 		// Increment completed scenarios
@@ -186,9 +194,26 @@ public class hooks extends Cucumberseleniumgluescripts {
 			}
 
 			byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+			// Convert byte array to BufferedImage
+	        BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(screenshot));
+	     // Resize the screenshot (adjust width and height as needed)
+	        int targetWidth = 800; // Desired width
+	        int targetHeight = 600; // Desired height
+	        
+	        Image resizedImage = originalImage.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+	        BufferedImage resizedBufferedImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);
 
-			// Attach screenshot to Allure report
-			Allure.addAttachment(attachmentName, new ByteArrayInputStream(screenshot));
+	        Graphics2D g2d = resizedBufferedImage.createGraphics();
+	        g2d.drawImage(resizedImage, 0, 0, null);
+	        g2d.dispose();
+
+	        // Convert BufferedImage back to byte array
+	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	        ImageIO.write(resizedBufferedImage, "png", baos);
+	        byte[] resizedScreenshot = baos.toByteArray();
+	        
+	        // Attach screenshot to Allure report
+			Allure.addAttachment(attachmentName, new ByteArrayInputStream(resizedScreenshot));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

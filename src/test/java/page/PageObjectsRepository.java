@@ -52,7 +52,7 @@ public class PageObjectsRepository extends SuperHelper {
 	public WebElement submit;
 	
 
-	@FindBy(how = How.XPATH, using = "(//button[@class='btn btn-primary'])[2]")
+	@FindBy(how = How.XPATH, using = "(//button[@class='btn btn-primary'])")
 	@CacheLookup
 	public WebElement Admin;
 	
@@ -164,8 +164,29 @@ public class PageObjectsRepository extends SuperHelper {
 	public WebElement phq;
 	
 	@FindBy(how = How.ID, using = "pills-GAD7-tab")
-	@CacheLookup
 	public WebElement Gad7;
+	
+	@FindBy(how = How.ID, using = "pills-MOUD-tab")
+	public WebElement Overdose;
+	
+	@FindBy(how = How.ID, using = "pills-UDS-tab")
+	public WebElement UDS;
+	
+	@FindBy(how = How.ID, using = "rx-form-tab")
+	public WebElement rxmeds;
+	
+	@FindBy(how = How.ID, using = "cm-form-tab")
+	public WebElement contigency;
+	
+	@FindBy(how = How.ID, using = "yesBtn")
+	public WebElement contigencyalertyes;
+	
+	@FindBy(how = How.XPATH, using = 	"//*[@id='cm-form']//*[@class='table-responsive']//following::*[normalize-space(text())='Contingency Management History:']")
+	public WebElement contigencyresponsivetable;
+	
+
+	
+	
 	
 	@FindBy(how = How.XPATH, using = "(//table[contains(@class, 'table-fixed')])[1]")
 	@CacheLookup
@@ -184,8 +205,60 @@ public class PageObjectsRepository extends SuperHelper {
 	public WebElement questiontablephq;	
 	
 	@FindBy(how = How.XPATH, using = "(//table[contains(@class, 'table-fixed')])[5]")
+	public WebElement questiontablegad7;
+	
+	@FindBy(how = How.XPATH, using = "//*[@id='rx-meds-form']")
+	public WebElement questiontablerxmed;
+	
+	@FindBy(how = How.XPATH, using = "//*[@id='questionnaire-MOUD']//label[@for='MOUD-1Yes']")
 	@CacheLookup
-	public WebElement questiontablegad7;	
+	public WebElement overdoseYes;
+	
+	@FindBy(how = How.XPATH, using = "//*[@id='questionnaire-MOUD']//Select[@id='MOUD-2']")
+	@CacheLookup
+	public WebElement overdosenaloxone;
+	
+	@FindBy(how = How.XPATH, using = "//*[@id='questionnaire-MOUD']//input[@id='MOUD-3']")
+	@CacheLookup
+	public WebElement overdoseDate;
+	
+	
+	
+	
+	@FindBy(how = How.XPATH, using = "//*[@id='questionnaire-UDS-form']//label[@for='UDS-1Yes']")
+	public WebElement UDSYes;
+	
+	@FindBy(how = How.XPATH, using = "//*[@id='questionnaire-UDS-form']//Select[@id='UDS-2']")
+	public WebElement UDSResult;
+	
+	@FindBy(how = How.XPATH, using = "//*[@id='questionnaire-UDS-form']//input[@id='UDS-3']")
+	public WebElement UDSDate;
+	
+	@FindBy(how = How.XPATH, using = "//*[@id='cm_form']//label[@for='enrol_in_cm_Y']")
+	public WebElement contigencyenroll;
+	
+	@FindBy(how = How.ID, using = "MOUD-submit")
+	public WebElement overdosesave;
+	
+	
+	@FindBy(how = How.ID, using = "UDS-submit")
+	public WebElement udssave;
+
+	
+	
+	
+	@FindBy(how = How.ID, using = "save-rxmeds")
+	public WebElement rxmedssave;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 

@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -36,8 +37,9 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-//import com.itextpdf.html2pdf.HtmlConverter;
 import com.itextpdf.io.image.ImageDataFactory;
+//import com.itextpdf.html2pdf.HtmlConverter;
+//import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -55,6 +57,7 @@ import utility.EnvHelper;
 import utility.ExcelDataReader;
 //import utility.ExtentReportsUtility;
 //import utility.ExtentReportsUtility;
+
 
 
 /**
@@ -419,7 +422,7 @@ public class SuperHelper extends ExcelDataReader {
 	 *            Enter Button name (e.g LoginButton or Submit Button)
 	 */
 	public static boolean seClick(boolean screenshot, WebElement testObject, String buttonName) {
-		return seClick(true, testObject, buttonName, null);
+		return seClick(screenshot, testObject, buttonName, null);
 	}
 
 	/**
@@ -494,6 +497,7 @@ public class SuperHelper extends ExcelDataReader {
 		
 	}
 	
+	
 	public static boolean seClicktabledata(WebElement testObject,String datatofind) {	
 		int successFlag = EnvConstants.FAIL;
 	    // Locate all rows in the table
@@ -523,6 +527,21 @@ public class SuperHelper extends ExcelDataReader {
 	    
 	        return getStatus(successFlag);
 		}
+	
+	
+
+//	    public static void resizeScreenshot(File inputFile, File outputFile, int width, int height) throws Exception {
+//	        BufferedImage originalImage = ImageIO.read(inputFile);
+//	        java.awt.Image resizedImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+//	        BufferedImage resizedBufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+//
+//	        Graphics2D g2d = resizedBufferedImage.createGraphics();
+//	        g2d.drawImage(resizedImage, 0, 0, null);
+//	        g2d.dispose();
+//
+//	        ImageIO.write(resizedBufferedImage, "png", outputFile);
+//	    }
+	
 
 	/**
 	 * <p>
@@ -555,14 +574,34 @@ public class SuperHelper extends ExcelDataReader {
 //			System.out.println("targetScreenshotFilePath  :" + targetScreenshotFilePath);
 			// Load the captured screenshot into a BufferedImage
 	        BufferedImage image = ImageIO.read(screenshotSourceFile);
-          if (!Description.equals("")) {
-	        // Annotate the screenshot
-	        annotateScreenshot(image, Description, 100, 100); // Customize the annotation text and position
-	     
-          }// Save the annotated image to the target path
-	        ImageIO.write(image, "png", new File(targetScreenshotFilePath));
-//			File destination = new File(targetScreenshotFilePath);
-//			FileUtils.copyFile(screenshotSourceFile, destination);
+	     // Get current width and height
+//            int currentWidth = image.getWidth();
+//            int currentHeight = image.getHeight();
+//            System.out.println("Current Width: " + currentWidth);
+//            System.out.println("Current Height: " + currentHeight);
+	        int targetWidth = 800; // Desired width
+	        int targetHeight = 383; // Desired height
+	        java.awt.Image resizedImage = image.getScaledInstance(targetWidth, targetHeight,java.awt.Image.SCALE_SMOOTH);
+	        BufferedImage resizedBufferedImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB);
+	        Graphics2D g2d = resizedBufferedImage.createGraphics();
+	        g2d.drawImage(resizedImage, 0, 0, null);
+	        g2d.dispose();
+	        
+//	        if (!Description.equals("")) {
+//	        // Annotate the screenshot
+//	        annotateScreenshot(resizedBufferedImage, Description, 100, 100); // Customize the annotation text and position
+//	     
+//          }// Save the annotated image to the target path
+//	        ImageIO.write(resizedBufferedImage, "png", new File(targetScreenshotFilePath));
+	        
+	     // Convert BufferedImage back to byte array
+	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	        ImageIO.write(resizedBufferedImage, "png", baos);
+	        byte[] resizedScreenshot = baos.toByteArray();
+
+	        Allure.addAttachment(screenName, new ByteArrayInputStream(resizedScreenshot));
+	        			File destination = new File(targetScreenshotFilePath);
+			FileUtils.copyFile(screenshotSourceFile, destination);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1541,7 +1580,7 @@ public class SuperHelper extends ExcelDataReader {
 	
 	public void seSelectQuestionaire(WebElement testObject) {
 	    try {
-	        seHighlightElement(testObject);
+//	        seHighlightElement(testObject);
 
 	        // Find all tr elements under the tbody
 	        List<WebElement> rows = testObject.findElements(By.xpath(".//tbody/tr"));
@@ -1558,7 +1597,7 @@ public class SuperHelper extends ExcelDataReader {
 	                for (WebElement input : inputs) {
 	                    String value = input.getAttribute("value");
 
-	                    if (value != null && value.matches("[1-5]")) {
+	                    if (value != null && value.matches("[0-4]")) {
 	                        validInputs.add(input);
 	                    }
 	                }
@@ -1582,6 +1621,40 @@ public class SuperHelper extends ExcelDataReader {
 	        }
 
 	    } catch (Exception e) {
+	        System.out.println("Exception caught during execution: " + e.getMessage());
+	        handleException(e);
+	    }
+	}
+	
+	public void seClickbuttonRamdomlyinTable(WebElement testObject) {
+		// Find all <td> elements that contain radio buttons
+	try {	
+		
+
+		 // Find all tr elements under tbody
+	        List<WebElement> trElements = testObject.findElements(By.xpath(".//tbody/tr"));
+	     
+	        // Random object to pick Yes or No
+	        Random random = new Random();
+
+	        for (WebElement tr : trElements) {
+	            // Find the second td element (where the radio buttons are) within each tr
+	            WebElement tdElement = tr.findElement(By.xpath(".//td[2]"));
+	           
+	            // Find the Yes and No labels within the td
+	            WebElement yesLabel = tdElement.findElement(By.xpath(".//label[@for[starts-with(.,'optionYes')]]"));
+	            WebElement noLabel = tdElement.findElement(By.xpath(".//label[@for[starts-with(.,'optionNo')]]"));
+
+	            // Click Yes or No randomly
+	            if (random.nextBoolean()) {
+	            	seClickUsingJavaScript(false,yesLabel,"");
+	                yesLabel.click();
+	            } else {	            
+	               
+	                seClickUsingJavaScript(false,noLabel,"");
+	            }
+	    }
+	 } catch (Exception e) {
 	        System.out.println("Exception caught during execution: " + e.getMessage());
 	        handleException(e);
 	    }
