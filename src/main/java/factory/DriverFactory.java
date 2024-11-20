@@ -83,19 +83,7 @@ public class DriverFactory {
         String fullDriversPath = System.getProperty("user.dir")  + EnvHelper.getValue(EnvConstants.driversFolderPath)+EnvHelper.getValue(EnvConstants.chromeDriver);
         System.out.println("fullDriversPath:"+ fullDriversPath);
 		System.setProperty("webdriver.chrome.driver", fullDriversPath);
-//      System.setProperty("webdriver.chrome.driver", "D:\\Eclipse\\chromedriver\\chromedriver.exe");
-
-//		System.out.println(EnvHelper.getValue(EnvConstants.driversFolderPath)+EnvHelper.getValue(EnvConstants.chromeDriver));
-//		WebDriverManager.chromedriver().setup();		
-		
-		if (downloadFilePath!=null && !downloadFilePath.equals("")) {
 			ChromeOptions options = new ChromeOptions();
-//			HashMap<String, Object> chromePrefs = new HashMap<>();
-//			chromePrefs.put(
-//					"profile.default_content_settings.popups", 0);
-//			chromePrefs.put("download.default_directory", downloadFilePath);
-//			options.setExperimentalOption("prefs", chromePrefs);
-//			options.addArguments("--test-type");
 			  // Set desired capabilities using ChromeOptions
 	        options.addArguments("--start-maximized"); // Start browser maximized
 	        options.addArguments("--disable-popup-blocking"); // Disable popup blocking
@@ -112,9 +100,9 @@ public class DriverFactory {
 			
 //			options.setCapability(ChromeOptions.CAPABILITY, options);
 			driver = new ChromeDriver(options);
-		} else {
-			driver = new ChromeDriver();
-		}
+//		} else {
+//			driver = new ChromeDriver();
+//		}
 		drivers.put(EnvConstants.chromeDriver, driver);
 	
         return driver;

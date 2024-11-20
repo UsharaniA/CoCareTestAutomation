@@ -52,7 +52,7 @@ public class PageObjectsRepository extends SuperHelper {
 	public WebElement submit;
 	
 
-	@FindBy(how = How.XPATH, using = "(//button[@class='btn btn-primary'])")
+	@FindBy(how = How.XPATH, using = "(//button[@class='btn btn-primary'])[2]")
 	@CacheLookup
 	public WebElement Admin;
 	
@@ -74,9 +74,15 @@ public class PageObjectsRepository extends SuperHelper {
 	@CacheLookup
 	public WebElement pass_confirm;
 	
-	@FindBy(how = How.XPATH, using = "//input[@type='submit']")
+	@FindBy(how = How.XPATH, using = "//button[@type='submit' and contains(@class, 'btn-submit')]")
 	@CacheLookup
 	public WebElement submit1;
+	
+	@FindBy(how = How.XPATH, using = "//input[@value='Update Password']")
+	public WebElement updatepassword;
+	
+	
+	
 	
 //	@FindBy(how = How.XPATH, using = "//a[text()='{email}']")
 //	@CacheLookup
@@ -103,6 +109,32 @@ public class PageObjectsRepository extends SuperHelper {
 	@CacheLookup
 	public WebElement newparticipant;
 	
+	
+	//My Particiapant
+	@FindBy(how = How.XPATH, using = "//*[@class='card-text' and text()='My Participants']")
+	@CacheLookup
+	public WebElement myparticipant;
+	
+	@FindBy(how = How.XPATH, using = "//tr[@class='cursor-pointer encounter-detail-row'][1]")
+	@CacheLookup
+	public WebElement encountertable;
+	
+	@FindBy(how = How.XPATH, using = "//span[normalize-space(text())='New Encounter']")
+	@CacheLookup
+	public WebElement newencounterparticpantpage;
+	
+	@FindBy(how = How.ID, using = "location_id")
+	public WebElement locationid;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@FindBy(how = How.XPATH, using = "//input[@type='text'and @autocomplete='alias']")
 	@CacheLookup
 	public WebElement studyID;
@@ -123,7 +155,7 @@ public class PageObjectsRepository extends SuperHelper {
 	@CacheLookup
 	public WebElement location;
 	
-	@FindBy(how = How.XPATH, using = "//span[normalize-space(text())='New Participant Encounter']")
+	@FindBy(how = How.XPATH, using = "//span[normalize-space(text())='New Encounter']")
 	@CacheLookup
 	public WebElement newencounter;	
 	
@@ -143,10 +175,12 @@ public class PageObjectsRepository extends SuperHelper {
 	@FindBy(how = How.XPATH, using = "//*[@id='exampleFormControlTextarea1']")
 	@CacheLookup
 	public WebElement encountercomment;	
-	
+//	
 	@FindBy(how = How.XPATH, using = "//*[@type='submit'and @value='Save Changes']")
-	@CacheLookup
 	public WebElement encountersavechanges;	
+//	
+//	@FindBy(how = How.ID, using = "complete-encounter")
+//	public WebElement encountersavechanges;	
 	
 	
 	@FindBy(how = How.ID, using = "pills-PROMIS2-tab")
@@ -251,7 +285,17 @@ public class PageObjectsRepository extends SuperHelper {
 	public WebElement rxmedssave;
 	
 	
+	@FindBy(how = How.XPATH, using = "//fieldset//div/label[contains(text(), 'This account')]")
+	public WebElement accountstatus;
 	
+	@FindBy(how = How.XPATH, using ="(//div[@class='alert alert-warning'])[1]")
+	public WebElement changepasswordstatus;
+	
+	@FindBy(how = How.XPATH, using ="(//div[@class='alert alert-warning'])[2]")
+	public WebElement accountstatus1;
+	
+	@FindBy(how = How.XPATH, using ="//input[@value='Unlock Account']")
+	public WebElement unlockbtn;
 	
 	
 	

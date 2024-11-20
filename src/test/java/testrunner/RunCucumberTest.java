@@ -9,7 +9,7 @@ import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-    features = "src/test/java/features/CreateNewEncounter.feature",
+    features = "src/test/java/features/ValidatePasswordResetAttempt.feature",
     glue = "stepdefinitions",
     plugin = {
         "pretty",
@@ -20,7 +20,13 @@ import io.cucumber.junit.CucumberOptions;
     }
   
 )
-
+//AccountLockedDuetoExpiredPassword
+//AccountLockedDuetoFailedattempts
+//AccountLockedDuetoInactivity
+//ValidatePasswordComplexity
+//ValidateAdminPagePasswordComplexity
+//ValidatePasswordExpiryWarning
+//ValidatePasswordResetAttempt
 
 public class RunCucumberTest {
 	 

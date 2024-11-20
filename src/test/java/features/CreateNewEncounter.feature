@@ -1,4 +1,4 @@
-Feature: Create New Encounter
+Feature: CreateNewEncounter
   Login to the Application and create new Encounters
 
   @TestCaseKey=CC-T21

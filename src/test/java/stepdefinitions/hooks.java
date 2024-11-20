@@ -83,8 +83,8 @@ public class hooks extends Cucumberseleniumgluescripts {
 	public void afterScenario() throws Exception {
 
 		System.out.println("*****************After Scenario*****************");
-//		SuperHelper.seCloseBrowser();
-		createPdfFromFolder(TEST_CASE_ID + ".pdf");
+		SuperHelper.seCloseBrowser();
+//		createPdfFromFolder(TEST_CASE_ID + ".pdf");
 //		ZephyrScaleAPI.updateTestResult(jiratestkey, allurereportmanager.getTestStatus()); // 1 for Pass in Zephyr
 		// Increment completed scenarios
 //        completedScenarios++;

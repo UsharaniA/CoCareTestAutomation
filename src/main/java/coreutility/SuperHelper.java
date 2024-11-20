@@ -461,6 +461,7 @@ public class SuperHelper extends ExcelDataReader {
 			}
 
 			if (screenshot) {
+				seCaptureScreenshot(buttonName, "");
 				seCaptureScreenshot(buttonName);
 //				ExtentReportsUtility.log(successFlag, step, seCaptureScreenshot(driver, buttonName));
 			}
@@ -491,7 +492,7 @@ public class SuperHelper extends ExcelDataReader {
 		 WebElement testObject = driver.findElement(By.xpath(datatofind));
 		 
 		 if (testObject.isDisplayed()) {
-			    seHighlightElement(testObject);
+			    seHighlightElement(testObject);				
 				testObject.click();
 		 }
 		
@@ -587,11 +588,11 @@ public class SuperHelper extends ExcelDataReader {
 	        g2d.drawImage(resizedImage, 0, 0, null);
 	        g2d.dispose();
 	        
-//	        if (!Description.equals("")) {
-//	        // Annotate the screenshot
-//	        annotateScreenshot(resizedBufferedImage, Description, 100, 100); // Customize the annotation text and position
-//	     
-//          }// Save the annotated image to the target path
+	        if (!Description.equals("")) {
+	        // Annotate the screenshot
+	        annotateScreenshot(resizedBufferedImage, Description, 100, 100); // Customize the annotation text and position
+	     
+          }// Save the annotated image to the target path
 //	        ImageIO.write(resizedBufferedImage, "png", new File(targetScreenshotFilePath));
 	        
 	     // Convert BufferedImage back to byte array
@@ -643,9 +644,9 @@ public class SuperHelper extends ExcelDataReader {
 	
 	public static void annotateScreenshot(BufferedImage image, String text, int x, int y) {
 	   
-		System.out.println("**************Anotate***************");
-		System.out.println("Image dimensions: " + image.getWidth() + "x" + image.getHeight());
-		System.out.println("Text position: (" + 1 + ", " + y + ")");
+//		System.out.println("**************Anotate***************");
+//		System.out.println("Image dimensions: " + image.getWidth() + "x" + image.getHeight());
+//		System.out.println("Text position: (" + 1 + ", " + y + ")");
 		 Graphics2D g2d = image.createGraphics();
 
 	        // Set font for annotation
@@ -1131,24 +1132,17 @@ public class SuperHelper extends ExcelDataReader {
 		try {
 			if (fieldData.equals(expectedValue)) {
 				successFlag = EnvConstants.PASS;
-//				if (!screenshot) {
-//					ExtentReportsUtility.log(successFlag, step,
-//							"Actual Data = " + fieldData + " | Expected Data = '" + expectedValue + "'");
-//				} else {
-//					ExtentReportsUtility.log(successFlag, step, "Actual Data = " + fieldData + " | Expected Data = '"
-//							+ expectedValue + "'" + seCaptureScreenshot(driver, expectedValue));
-//				}
+				Allure.step( "TEXT MATCHED : Actual Data = " + fieldData + " | Expected Data = '" + expectedValue + "'");
 			} else {
-//				ExtentReportsUtility.log(successFlag, step, "Actual Data = " + fieldData + " | Expected Data = '"
-//						+ expectedValue + "'" + seCaptureScreenshot(driver, expectedValue));
+				 Allure.step("TEXT UNMATCHED:", () -> {
+			            // Simulating a failure
+			            throw new RuntimeException("Actual Data = " + fieldData + " | Expected Data = '" + expectedValue + "'");
+			            });
 			}
 //			RESULT_STATUS = getSuccessValue(successFlag);
 		} catch (Exception e) {
 			System.out.println(e.getLocalizedMessage());
-//			RESULT_STATUS = getSuccessValue(successFlag);
-//			ExtentReportsUtility.log(EnvConstants.FAIL,
-//					"Web Element NOT found" + seCaptureScreenshot(driver, expectedValue));
-		}
+	}
 		return getSuccessValue(successFlag);
 
 	}
@@ -1658,6 +1652,46 @@ public class SuperHelper extends ExcelDataReader {
 	        System.out.println("Exception caught during execution: " + e.getMessage());
 	        handleException(e);
 	    }
+	}
+	
+	
+	
+	public static  String segetnthelementfromtable(int coltofind ,WebElement testObject ) {
+		String fourthTdText = null;
+		 WebElement testObjectnthelm = testObject.findElement(By.xpath(".//td[" + coltofind +"]"));
+		 
+		 if (testObjectnthelm.isDisplayed()) {
+			    seHighlightElement(testObjectnthelm);				
+			 // Get the text of the 4th <td> element
+		         fourthTdText = testObjectnthelm.getText();
+		        return  fourthTdText ;
+		 }
+		
+		return fourthTdText; 
+		
+	}
+	
+	public static boolean seComparepartialText(WebElement testObject, String expectedValue)
+			throws InterruptedException {
+		seWaitForPageLoad();
+		String fieldData = testObject.getText().trim();
+		int successFlag = EnvConstants.FAIL;
+		try {
+			 if (fieldData.contains(expectedValue)) {
+				successFlag = EnvConstants.PASS;
+				Allure.step( "TEXT MATCHED : Actual Data = " + fieldData + " | Expected Data = '" + expectedValue + "'");
+			} else {
+				 Allure.step("TEXT UNMATCHED:", () -> {
+			            // Simulating a failure
+			            throw new RuntimeException("Actual Data = " + fieldData + " | Expected Data = '" + expectedValue + "'");
+			            });
+			}
+//			RESULT_STATUS = getSuccessValue(successFlag);
+		} catch (Exception e) {
+			System.out.println(e.getLocalizedMessage());
+	}
+		return getSuccessValue(successFlag);
+
 	}
 
 }

@@ -35,7 +35,7 @@ public class Cucumberseleniumgluescripts extends SuperHelper {
 	public void loadData() throws IOException {
 		constdata = ExcelDataReader.getConstData(); // Initialize constdata
 		EnvConstants.screenshotPath = FileUtility.createResultFolder(TEST_CASE_ID);
-		System.out.println(screenshotPath);
+		System.out.println("screenshotPath" + screenshotPath);
 	}
 
 	public void navigatetologinscreen() {
@@ -54,11 +54,34 @@ public class Cucumberseleniumgluescripts extends SuperHelper {
 			String username = (String) constdata.get(pusername);
 			String password = (String) constdata.get(ppassword);
 //			addParametersToAllure("logintoApplication", pusername);
-			seOpenBrowser(EnvConstants.chromeDriver, baseURL, "Launching the application");
+			seOpenBrowser(EnvConstants.chromeDriver, baseURL, "");
 			seSetUserId(PageObjectsRepository.get().userName, username);
 			seSetUserId(PageObjectsRepository.get().password, password);
 			seClick(PageObjectsRepository.get().submit, "LoginButton");
-			seCaptureScreenshot("LoginScreen", "LoginScreen");
+			seCaptureScreenshot("HomeScreen", "");
+			
+
+		} catch (Exception e) {
+			// Log the error and rethrow to ensure the scenario fails
+			throw new Exception("Error : " + e.getMessage());
+		}
+	}
+	
+	public void logininvalidcredentials(boolean openbrowser,String pusername, String ppassword) throws Exception {
+		try {
+
+			String username = (String) constdata.get(pusername);
+//			String password = (String) constdata.get(ppassword);
+//			addParametersToAllure("logintoApplication", pusername);
+		
+			if (openbrowser) {
+			seOpenBrowser(EnvConstants.chromeDriver, baseURL, "");
+			}
+			seSetUserId(PageObjectsRepository.get().userName, username);
+			seSetUserId(PageObjectsRepository.get().password, ppassword);
+			seClick(PageObjectsRepository.get().submit, "LoginButton");
+			seCaptureScreenshot("HomeScreen", "");
+		
 			
 
 		} catch (Exception e) {
@@ -68,20 +91,22 @@ public class Cucumberseleniumgluescripts extends SuperHelper {
 	}
 
 	public void clickForgotpassword(String useremail) throws Exception {
+		String username = (String) constdata.get(useremail);
 		seClick(PageObjectsRepository.get().forgotpassword, "forgotpassword");
-		seSetUserId(PageObjectsRepository.get().emailaddress, useremail, "UserEmail");
+		seSetUserId(PageObjectsRepository.get().emailaddress, username, "");
 		seClick(PageObjectsRepository.get().submit, "submit");
 
 	}
 
 	public void clickAdmin_User() throws Exception {
-		seClick(true, PageObjectsRepository.get().Admin, "AdminButton");
+		seClick(false, PageObjectsRepository.get().Admin, "AdminButton");
 		seWaitForPageLoad();
 		seClick(true, PageObjectsRepository.get().Users, "UserButton");
 
 	}
 
-	public void clickAdmin_User(String email_text) throws Exception {		
+	public void clickAdmin_User(String pusername) throws Exception {
+		String email_text = (String) constdata.get(pusername);
 		String xpath_expr = "//a[text()='" + email_text + "']";
 		sefindelementClick(xpath_expr);
 	}
@@ -354,10 +379,13 @@ public class Cucumberseleniumgluescripts extends SuperHelper {
 				seClickUsingJavaScript(false, PageObjectsRepository.get().contigencyenroll, "contigency");
 				seWaitForPageLoad();
 				
-				
+				seHighlightElement(PageObjectsRepository.get().contigencyalertyes);
 				seWaitForWebElement(30000,
 				ExpectedConditions.visibilityOf(PageObjectsRepository.get().contigencyalertyes));
 				seClick(false, PageObjectsRepository.get().contigencyalertyes, "");
+				seWaitForPageLoad();
+				seWaitForPageLoad();
+				seWaitForPageLoad();
 				seWaitForPageLoad();
 				seWaitForWebElement(30000,
 						ExpectedConditions.visibilityOf(PageObjectsRepository.get().contigencyresponsivetable));
@@ -369,5 +397,101 @@ public class Cucumberseleniumgluescripts extends SuperHelper {
 			System.out.println(e.getMessage());
 		}
 	}
+	
+	
+	public void clickonMyParticiapant() {
+		seClick(true, PageObjectsRepository.get().myparticipant, "myparticipant");
+			
+	}
+	
+	public void clickregistryid(String pregistryid) throws Exception {	
+		String registryid = (String) constdata.get(pregistryid);
+		addParametersToAllure("clickregistryid", registryid);
+		String xpath_expr = "//td[text()='" + registryid + "']";
+		sefindelementClick(xpath_expr);
+	}
+	
+	public void checkinprogressencounter() throws Exception {	
+		try {
+			seWaitForWebElement(30000,
+					ExpectedConditions.visibilityOf(PageObjectsRepository.get().encountertable));
+			// Locate the 4th <td> element within the first row
+			String getstatus = segetnthelementfromtable(4,PageObjectsRepository.get().encountertable);
+			if (getstatus.equals("inProgress")) {
+				seClick(true, PageObjectsRepository.get().newencounterparticpantpage, "newencounter");
+				if (PageObjectsRepository.get().locationid.isDisplayed()) {
+					throw new Exception("Able to create new encounter.");
+				}
+				
+			}
+			
+		}catch(Exception e) {
+			System.out.println(e.getMessage());			
+		}
+		
+	}
+		
+		
+		
+		public void checkaccountlock(String errmsg) throws Exception {	
+			try {
+			seCompareText(PageObjectsRepository.get().alert, errmsg, "Validate error");
+			seCaptureScreenshot("UserNotification", "");
+			SuperHelper.seCloseBrowser();	
+			}catch(Exception e) {
+				System.out.println(e.getMessage());	
+				throw new Exception("Account lock check failed: " + errmsg, e);
+			}
+			
+	     }
+		
+		public void checkwarningmsg(String errmsg) throws Exception {	
+			try {
+			seComparepartialText(PageObjectsRepository.get().alert, errmsg);
+			seCaptureScreenshot("UserNotification", "");
+				
+			}catch(Exception e) {
+				System.out.println(e.getMessage());	
+				throw new Exception("Account lock check failed: " + errmsg, e);
+			}
+			
+	     }
+	
+		public void adminnotification(String errmsg1,String errmsg2) throws Exception {	
+			try {
+			seCompareText(PageObjectsRepository.get().changepasswordstatus, errmsg1, "Validate error");
+			if (TEST_CASE_ID.equals("AccountLockedDuetoExpiredPassword")) {
+				seHighlightElement(PageObjectsRepository.get().accountstatus1);
+				seCompareText(PageObjectsRepository.get().accountstatus1, errmsg2, "Validate error");
+			}else {
+				seHighlightElement(PageObjectsRepository.get().accountstatus);
+				seCompareText(PageObjectsRepository.get().accountstatus, errmsg2, "Validate error");
+					
+			}
+			seCaptureScreenshot("AdminScreen", "");
+			}catch(Exception e) {
+				throw new Exception("Validation failed: " + e.getMessage());		
+			}
+			
+		}
+		
+	
+		
+		
+			
+			public void adminaccountunlock() throws Exception {	
+				try {
+					seClickUsingJavaScript(false, PageObjectsRepository.get().unlockbtn,"");
+//					seClick(false ,PageObjectsRepository.get().unlockbtn,"Accountunlock");
+					seCompareText(PageObjectsRepository.get().alert, "Account unlocked successfully.", "Validate error");
+					seCaptureScreenshot("AccountUnlocked", "");	
+				}catch(Exception e) {
+					System.out.println(e.getMessage());			
+				}		
+			
+	     }
+	
+	
+	
 
 }

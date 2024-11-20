@@ -9,6 +9,7 @@ import io.qameta.allure.Step;
 import page.PageObjectsRepository;
 import scripts.Cucumberseleniumgluescripts;
 import utility.DatabaseUtils;
+import utility.DatabaseUtils2;
 import utility.EnvHelper;
 import utility.ExcelDataReader;
 import utility.FileUtility;
@@ -20,7 +21,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -93,35 +96,32 @@ public class Stepdefinition extends Cucumberseleniumgluescripts {
 //
 //	}
 
-//	@Given("the user navigates to the login page")
-//	public void the_user_navigates_to_the_login_page() {
-//		try {
-//			navigatetologinscreen();
-//		} catch (Exception e) {
-////			hooks.attachExceptionToScenario(scenario,e,"Login");
-////            throw e;
-//			allurereportmanager.captureAndAttachScreenshot("screenshotname");
-//		}
-//
-//	}
+	@Given("the user navigates to the login page")
+	public void the_user_navigates_to_the_login_page() {
+		try {
+			navigatetologinscreen();
+		} catch (Exception e) {
+//			hooks.attachExceptionToScenario(scenario,e,"Login");
+//            throw e;
+			allurereportmanager.captureAndAttachScreenshot("screenshotname");
+		}
+
+	}
 	
 
 
 	@Given("the user logins in with valid useremail {string} and password {string} and clicks the login button")
 	public void theUserEntersValidUserEmailAndPasswordAndClicksTheLoginButton(String email, String password)
 			throws Exception {
-
 		try {
-			
-			
 			logintoApplication(email, password);
-//			hooks.captureAndAttachScreenshotToAllure("Login");
 		} catch (Exception e) {
 			hooks.setException(e);// Store the exception for the hook
 			hooks.captureAndAttachScreenshotToAllure("Login");
 			throw e; // Rethrow the exception to mark the step as failed
 		}
 	}
+	
 
 	@When("the user clicks on the forgot password button and provided the {string} to reset")
 	public void theUserClicksOnTheforgotButton(String useremail) throws Exception {
@@ -186,7 +186,7 @@ public class Stepdefinition extends Cucumberseleniumgluescripts {
 
 	}
 
-	@Then("enter the newpassword and click on Update Password and the system should display an error message:")
+	@Then("enter the newpassword and click on Submit Password and the system should display an error message:")
 	public void the_system_should_display_an_error_message(DataTable dataTable) throws Exception {
 		try {
 			List<List<String>> data = dataTable.asLists(String.class);
@@ -194,10 +194,33 @@ public class Stepdefinition extends Cucumberseleniumgluescripts {
 				seSetUserId(PageObjectsRepository.get().password, data.get(row).get(0));
 				seSetUserId(PageObjectsRepository.get().pass_confirm, data.get(row).get(0),
 						"PasswordConfirmation" + row);
-				seClick(PageObjectsRepository.get().submit1, "UpdatePassword");
+				seClick(PageObjectsRepository.get().submit1, "submit1");
 				String expectedErrorMessage = data.get(row).get(1);
 				seCompareText(PageObjectsRepository.get().alert, expectedErrorMessage, "Validate error");
-				seCaptureScreenshot("Error" + row);
+				seCaptureScreenshot("Validation" + row,"");
+			}
+
+		} catch (Exception e) {
+			hooks.handleexceptioncucumbersteps(e, "UpdatePassword");
+			throw e;
+		}
+
+	}
+	
+	
+	
+	@Then("enter the newpassword and click on Update Password and the system should display an error message:")
+	public void the_system_should_display_an_error_message_admin(DataTable dataTable) throws Exception {
+		try {
+			List<List<String>> data = dataTable.asLists(String.class);
+			for (int row = 1; row < data.size(); row++) { // Start from row 1 to skip header
+				seSetUserId(PageObjectsRepository.get().password, data.get(row).get(0));
+				seSetUserId(PageObjectsRepository.get().pass_confirm, data.get(row).get(0),
+						"PasswordConfirmation" + row);
+				seClick(PageObjectsRepository.get().updatepassword, "UpdatePassword");
+				String expectedErrorMessage = data.get(row).get(1);
+				seCompareText(PageObjectsRepository.get().alert, expectedErrorMessage, "Validate error");
+				seCaptureScreenshot("Validation" + row,"");
 			}
 
 		} catch (Exception e) {
@@ -213,8 +236,6 @@ public class Stepdefinition extends Cucumberseleniumgluescripts {
 			String Location) throws Exception {
 		
 		try {
-			
-
 			createnewparticipant(StudyID, EnrollmentDate, PrimaryCarePhysician, Location);
 			 
 		} catch (Exception e) {
@@ -337,6 +358,202 @@ public class Stepdefinition extends Cucumberseleniumgluescripts {
 		}
 	}
 	
+	@When("the user clicks on the My Participant button")
+	public void clickonMyParticiapantbutton() throws Exception {
+		
+		try {
+			clickonMyParticiapant();
+			 
+		} catch (Exception e) {
+			hooks.handleexceptioncucumbersteps(e, "clickonMyParticiapantbutton");
+			throw e;
+		}
+	}
+	
+	
+	@And("select the registry id {string}")
+	public void selectsregistryid(String pregistryid) throws Exception {
+		try {
+			clickregistryid(pregistryid);
+		} catch (Exception e) {
+			hooks.handleexceptioncucumbersteps(e, "selectsregistryid");
+			
+			throw e;
+		}
+		
+	}
+		
+		
+	@Then ("if any encounter is inprogress ,a new encounter should not be created")
+	public void testinprogressencounter() throws Exception {
+		
+		try {
+			checkinprogressencounter();
+		} catch (Exception e) {
+			hooks.handleexceptioncucumbersteps(e, "testinprogressencounter");			
+			throw e;
+		}
+	}
+	
+	
+	@Then ("the account should be locked and  the user should see an {string} message")
+	public void testaccountlockinactive(String errmsg) throws Exception {
+		
+		try {
+			checkaccountlock( errmsg);
+			
+		} catch (Exception e) {
+			hooks.handleexceptioncucumbersteps(e, "testaccountlockinactive");			
+			throw e;
+		}
+	}
+	
+	
+	@Given("the account is active for {string}")
+	public void activateaccount(String useremail)throws Exception {
+		try {
+			 String username = (String) constdata.get(useremail);
+			 DatabaseUtils2.dbActivateAccount(username);
+		
+		} catch (Exception e) {
+			hooks.setException(e);
+			hooks.captureAndAttachScreenshotToAllure("Login");
+			throw e; 
+		}
+	}	
 
 	
+	
+	@When("the user logins in with valid useremail {string} and invalid password {string} and clicks the login button")
+	public void theUserEntersinValidUserEmailAndPasswordAndClicksTheLoginButton(String email, String password)
+			throws Exception {
+		try {
+			logininvalidcredentials(true,email, password);
+		} catch (Exception e) {
+			hooks.setException(e);// Store the exception for the hook
+			hooks.captureAndAttachScreenshotToAllure("Login");
+			throw e; // Rethrow the exception to mark the step as failed
+		}
+	}	
+
+	@Then("again the user logins in with valid useremail {string} and invalid password {string} and clicks the login button")
+	public void theUseragainEntersinValidUserEmailAndPasswordAndClicksTheLoginButton(String email, String password)
+			throws Exception {
+		try {
+			logininvalidcredentials(false,email, password);
+		} catch (Exception e) {
+			hooks.setException(e);// Store the exception for the hook
+			hooks.captureAndAttachScreenshotToAllure("Login");
+			throw e; // Rethrow the exception to mark the step as failed
+		}
+	}
+	
+	
+	@Given("the account password expired for useremail {string}")
+	public void setpasswordexpiryinDB(String useremail) {
+		String username = (String) constdata.get(useremail);
+        LocalDateTime currentDate = LocalDateTime.now();
+        LocalDateTime pastDate = currentDate.minus(2, ChronoUnit.DAYS); // Example: subtracting 1 day
+        Allure.step("The account password expired on " + pastDate );
+        DatabaseUtils2.updateDBcolumn("password_expires_at",username,pastDate);
+
+	}
+	
+	@Then("reset the account for useremail {string}")
+	public void resettheaccount(String useremail) {
+		String username = (String) constdata.get(useremail);
+        DatabaseUtils2.updateDBforcereset("force_reset","0",useremail);
+
+	}
+	
+	@When("account inactive for more than 30 days for useremail {string}")
+	public void setlastuseddateinDB(String useremail) {		
+		try {
+			String username = (String) constdata.get(useremail);
+            LocalDateTime currentDate = LocalDateTime.now();
+            LocalDateTime pastDate = currentDate.minus(32, ChronoUnit.DAYS); // Example: subtracting 1 day
+            Allure.step("The account was active on " + pastDate );
+            DatabaseUtils2.updateDBcolumn("last_used_at",username,pastDate);
+		} catch (Exception e) {
+			hooks.setException(e);// Store the exception for the hook
+			hooks.captureAndAttachScreenshotToAllure("Login");
+			throw e; // Rethrow the exception to mark the step as failed
+		}
+	}
+	
+
+	@And("again the user clicks on the forgot password button and provided the {string} to reset")
+	public void theUserClicksOnTheforgotButton3time(String useremail) throws Exception {
+		try {
+			navigatetologinscreen();
+			clickForgotpassword(useremail);
+		} catch (Exception e) {
+			hooks.setException(e);// Store the exception for the hook
+			hooks.captureAndAttachScreenshotToAllure("Login");
+			throw e; // Rethrow the exception to mark the step as failed
+		}
+	}
+	
+	@Then ("the user should see an {string} message")
+	public void userseesmessage(String errmsg) throws Exception {
+		
+		try {
+			checkaccountlock( errmsg);
+		} catch (Exception e) {
+			hooks.handleexceptioncucumbersteps(e, "userseesmessage");			
+			throw e;
+		}
+	}
+	
+	
+	@Then ("the user should see an warning message {string}")
+	public void userseeswarningmessage(String errmsg) throws Exception {
+		
+		try {
+			checkwarningmsg( errmsg);
+		} catch (Exception e) {
+			hooks.handleexceptioncucumbersteps(e, "userseeswarningmessage");			
+			throw e;
+		}
+	} 
+	@Then ("admin should see an warning message {string} and {string}")
+	public void adminseesmessage(String errmsg1 ,String errmsg2) throws Exception {
+		
+		try {
+			adminnotification( errmsg1,errmsg2);
+		} catch (Exception e) {
+			hooks.handleexceptioncucumbersteps(e, "testaccountlockinactive");			
+			throw e;
+		}
+	}
+
+
+	@Then("login as admin with {string} and {string}")
+	public void loginasadmin(String email, String password)
+			throws Exception {
+		try {
+			logintoApplication(email, password);
+		} catch (Exception e) {
+			hooks.setException(e);// Store the exception for the hook
+			hooks.captureAndAttachScreenshotToAllure("Login");
+			throw e; // Rethrow the exception to mark the step as failed
+		}
+	}
+	
+	@And("the admin unlock the account")
+	public void accountunlock() throws Exception {
+		try {
+			adminaccountunlock();
+		} catch (Exception e) {
+			hooks.setException(e);// Store the exception for the hook
+			hooks.captureAndAttachScreenshotToAllure("Login");
+			throw e; // Rethrow the exception to mark the step as failed
+		}
+	}
+	
+	
+	
+	
+
+//	/final class
 }
